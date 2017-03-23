@@ -1,64 +1,65 @@
 package com.kayroc.model;
 
 
-public class User {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class User implements UserDetails {
 
     private static final long serialVersionUID = 391914827490230925L;
 
-    private String userName;
-    private String name;
-    private String lastName;
-    private String email;
+    private Long id;
+    private String username;
+    private String password;
+    private boolean enabled;
 
-    public User() {
-    }
-
-    public User(String userName, String name, String lastName, String email) {
-        this.userName = userName;
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public User(Long id, String username, String password, boolean enabled) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // we never lock accounts
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // credentials never expire
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

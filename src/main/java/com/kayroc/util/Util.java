@@ -2,6 +2,9 @@ package com.kayroc.util;
 
 
 import com.kayroc.model.Item;
+import com.kayroc.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +13,20 @@ import java.util.List;
 import java.util.Map;
 
 public class Util {
+
+    public static Map<String, UserDetails> createDummyUserDetails() {
+
+        Map<String, UserDetails> userDetailsHashMap = new HashMap<String, UserDetails>();
+        User user1= new User(1L, "jim@domain.com", "$2a$10$g51wPrmsY0e6c4Ba04gUuOkdb/I1y6uBT2Ukb2ZnX28SErjgQ3mca", true);
+        User user2= new User(2L, "bob@domain.com", "$2a$10$g51wPrmsY0e6c4Ba04gUuOkdb/I1y6uBT2Ukb2ZnX28SErjgQ3mca", true);
+        User user3= new User(3L, "bili@domain.com", "$2a$10$g51wPrmsY0e6c4Ba04gUuOkdb/I1y6uBT2Ukb2ZnX28SErjgQ3mca", true);
+
+        userDetailsHashMap.put(user1.getUsername(), user1);
+        userDetailsHashMap.put(user2.getUsername(), user2);
+        userDetailsHashMap.put(user3.getUsername(), user3);
+
+        return userDetailsHashMap;
+    }
 
     public static Map<Long, Item> createDummyItems() {
         Map<Long, Item> itemsMap = new HashMap<Long, Item>();
@@ -62,8 +79,8 @@ public class Util {
         dateTimesList.add(today13);
         dateTimesList.add(today14);
 
-        itemViewsMap.put(1l, dateTimesList);
-        itemViewsMap.put(2l, dateTimesList);
+        itemViewsMap.put(1L, dateTimesList);
+        itemViewsMap.put(2L, dateTimesList);
 
 
         LocalDateTime tempToday2 = today.minusMinutes(11);
@@ -79,8 +96,20 @@ public class Util {
         tempDateTimesList.add(tempToday5);
         tempDateTimesList.add(tempToday6);
 
-        itemViewsMap.put(3l, tempDateTimesList);
+        itemViewsMap.put(3L, tempDateTimesList);
 
         return itemViewsMap;
+    }
+
+    public static boolean checkRawAndEncodedPasswordMatch(String rawPassword, String encodedPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        return encoder.matches(rawPassword, encodedPassword);
+    }
+
+    public static String encodePassword(String rawPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        return hashedPassword;
     }
 }
